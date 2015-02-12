@@ -1,5 +1,7 @@
-http://www.nrk.no/
 http://www.stortinget.no/
+https://www.regjeringen.no/
+http://www.nrk.no/
 http://www.aftenposten.no/
 http://www.vg.no/
-http://www.usit.uio.no/
+http://www.dagbladet.no/
+http://www.bt.no/
