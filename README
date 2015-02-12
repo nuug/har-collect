@@ -1,0 +1,6 @@
+Extract HAR formatted information for Norwegian web sites
+=========================================================
+
+Using PhantomJS and the
+https://github.com/ariya/phantomjs/blob/master/examples/netsniff.js
+script.

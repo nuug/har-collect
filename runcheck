@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cat testurls.txt | while read url ; do
+    filename=$(echo "$url" | cut -d/ -f3-| sed 's%/$%%' |tr / %)
+    echo "$url"
+    phantomjs netsniff.js "$url" > "har-data/$filename.har"
+done
