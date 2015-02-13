@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+for f in har-data/*.har; do
+    if curl -s -XPUT "http://localhost:9200/har-data/uri/$(basename $f|sed s/%/%%/g)" -d@$f 2>&1 |
+       grep -q error; then
+        echo problem with $f
+    fi
+done
