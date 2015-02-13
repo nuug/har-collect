@@ -144,4 +144,6 @@ if (system.args.length === 1) {
             phantom.exit();
         }
     });
+    // Avoid error strings before the JSON string.
+    page.onError = function(msg, stack) { };
 }
