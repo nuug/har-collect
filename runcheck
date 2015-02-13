@@ -16,7 +16,7 @@ cat $file | while read url ; do
         harfile="har-data/$filename.har"
         if [ ! -e "$harfile" ] ; then
             echo "testing $url"
-            if phantomjs netsniff.js "$url" > "$harfile.new" && 
+            if phantomjs --ssl-protocol any netsniff.js "$url" > "$harfile.new" && 
                 [ -s "$harfile.new" ]; then
                 mv "$harfile.new" "$harfile"
             else
