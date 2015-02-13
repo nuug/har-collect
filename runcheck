@@ -13,11 +13,17 @@ cat $file | while read url ; do
       http*)
         # Save with URL as filename, replacing / with % and dropping trailing slash.
         filename=$(echo "$url" | sed 's%/$%%' |tr / %)
-        echo "$url"
-        if phantomjs netsniff.js "$url" > "har-data/$filename.har.new" ; then
-            mv "har-data/$filename.har.new" "har-data/$filename.har"
+        harfile="har-data/$filename.har"
+        if [ -e "$harfile" ] ; then
+            echo found $harfile, skipping
+            continue
+        fi
+        echo "testing $url"
+        if phantomjs netsniff.js "$url" > "$harfile.new" && 
+            [ -s "$harfile.new" ]; then
+            mv "$harfile.new" "$harfile"
         else
-            rm "har-data/$filename.har.new"
+            rm "$harfile.new"
         fi
         ;;
     esac
