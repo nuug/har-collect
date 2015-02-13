@@ -2,7 +2,7 @@
 
 set -e
 
-file=testurls.txt
+file=urls-test.txt
 
 if [ "$1" ] ; then
     file="$1"
@@ -14,16 +14,19 @@ cat $file | while read url ; do
         # Save with URL as filename, replacing / with % and dropping trailing slash.
         filename=$(echo "$url" | sed 's%/$%%' |tr / %)
         harfile="har-data/$filename.har"
-        if [ -e "$harfile" ] ; then
-            echo found $harfile, skipping
-            continue
-        fi
-        echo "testing $url"
-        if phantomjs netsniff.js "$url" > "$harfile.new" && 
-            [ -s "$harfile.new" ]; then
-            mv "$harfile.new" "$harfile"
+        if [ ! -e "$harfile" ] ; then
+            echo "testing $url"
+            if phantomjs netsniff.js "$url" > "$harfile.new" && 
+                [ -s "$harfile.new" ]; then
+                mv "$harfile.new" "$harfile"
+            else
+                rm "$harfile.new"
+            fi
         else
-            rm "$harfile.new"
+            echo found $harfile, not downloading
+        fi
+        if [ -e "$harfile" ] && grep -q google-analytics.com "$harfile" ; then
+           echo "NSA/FRA warning for $url"
         fi
         ;;
     esac
