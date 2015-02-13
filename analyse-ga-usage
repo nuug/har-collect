@@ -1,0 +1,6 @@
+#!/bin/sh
+
+total=$(ls har-data/*.har | wc -l)
+gausers=$(grep -l google-analytics.com har-data/*.har | wc -l)
+
+printf "%d (%.1f) of %d\n" "$gausers" "$(echo 100 \* $gausers / $total | bc -l)" "$total"
