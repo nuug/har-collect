@@ -1,4 +1,5 @@
 // from http://stackoverflow.com/questions/16846506/phantomjs-timeout
+// based on https://github.com/ariya/phantomjs/raw/master/examples/netsniff.js
 "use strict";
 
 // stop after 20 sec ( add this before you request your webpage )
