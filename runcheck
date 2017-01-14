@@ -25,9 +25,6 @@ cat $file | while read url ; do
         else
             echo found $harfile, not downloading
         fi
-        if [ -e "$harfile" ] && grep -q google-analytics.com "$harfile" ; then
-           echo "NSA/FRA warning for $url"
-        fi
         ;;
     esac
 done
