@@ -1,4 +1,6 @@
 // from http://stackoverflow.com/questions/16846506/phantomjs-timeout
+"use strict";
+
 // stop after 20 sec ( add this before you request your webpage )
 setTimeout(function() {phantom.exit();},20000);
 
