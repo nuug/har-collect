@@ -1,6 +1,42 @@
 #!/bin/sh
 
-total=$(ls har-data/*.har | wc -l)
-gausers=$(grep -l google-analytics.com har-data/*.har | wc -l)
+dataset="har-data/*.har"
+#dataset="har-data/*kommune.no.har"
 
-printf "%d (%.1f%%) of %d\n" "$gausers" "$(echo 100 \* $gausers / $total | bc -l)" "$total"
+gaurl() {
+    egrep -l '"url": .*(google-analytics.com|http://www.usit.uio.no/vrtx/decorating/resources/dist/urchin/__utm.gif)' $dataset
+}
+
+gausers() {
+    egrep -l '"url": .*(google-analytics.com/__utm.gif|google-analytics.com/collect|google-analytics.com/r/__utm.gif|google-analytics.com/r/collect|http://www.usit.uio.no/vrtx/decorating/resources/dist/urchin/__utm.gif)' $dataset
+}
+
+gaaipusers() {
+    egrep -l '"url": .*google-analytics.com/.*aip=1' $dataset
+}
+
+total=$(ls $dataset | wc -l)
+gaurl=$(gaurl | wc -l)
+gausers=$(gausers | wc -l)
+gaaipusers=$(gaaipusers | wc -l)
+
+printf "%d (%.1f%%) of %d contacts google-analytics.com\n" "$gaurl" "$(echo 100 \* $gaurl / $total | bc -l)" "$total"
+printf "%d (%.1f%%) of %d submits to google-analytics.com\n" "$gausers" "$(echo 100 \* $gausers / $total | bc -l)" "$total"
+printf "%d (%.1f%%) of %d uses aip=1 in the GA URL\n" "$gaaipusers" "$(echo 100 \* $gaaipusers / $gausers | bc -l)" "$gausers"
+
+if [ "$1" = "-v" ] ; then
+    tfile=$(mktemp)
+    gaurl |sort > $tfile
+    gausers |sort | comm -3 $tfile -
+    rm $tfile
+fi
+
+if [ "$1" = "-q" ] ; then
+    tfile=$(mktemp)
+    gaaipusers |sort > $tfile
+    gausers |sort | comm -3 $tfile -
+    rm $tfile
+fi
+if [ "$1" = "-o" ] ; then
+    gaaipusers
+fi
