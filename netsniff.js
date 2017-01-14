@@ -138,13 +138,15 @@ if (system.args.length === 1) {
             console.log('FAIL to load the address');
             phantom.exit(1);
         } else {
-            page.endTime = new Date();
-            page.title = page.evaluate(function () {
-                return document.title;
-            });
-            har = createHAR(page.address, page.title, page.startTime, page.resources);
-            console.log(JSON.stringify(har, undefined, 4));
-            phantom.exit();
+            setTimeout(function() { // Save 3 seconds later, to give javascript code some time to run
+                page.endTime = new Date();
+                page.title = page.evaluate(function () {
+                    return document.title;
+                });
+                har = createHAR(page.address, page.title, page.startTime, page.resources);
+                console.log(JSON.stringify(har, undefined, 4));
+                phantom.exit();
+            },10000);
         }
     });
     // Avoid error strings before the JSON string.
