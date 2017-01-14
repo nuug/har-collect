@@ -2,8 +2,9 @@ Extract HAR formatted information for Norwegian web sites
 =========================================================
 
 Using PhantomJS and the
-https://github.com/ariya/phantomjs/blob/master/examples/netsniff.js
-script.
+<URL: https://github.com/ariya/phantomjs/blob/master/examples/netsniff.js >
+script.  An alternative script is available from
+<URL: https://github.com/cvan/phantomHAR >.
 
 See <URL: http://www.softwareishard.com/blog/har-12-spec/ > for
 more information about the HAR file format.
