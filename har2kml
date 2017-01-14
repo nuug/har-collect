@@ -10,13 +10,17 @@ else
 fi
 
 har2hosts() {
-    jq -r '.log | .entries | map(.request) | map(.url) | join("\n")' < $har |
+    jq -r '.log | .entries | map(.request) | map(.url) | join("\n")' < $har | grep ^http |
         cut -d/ -f3 | sort -u
 }
 
+if [ ! -d cache ] ; then mkdir cache ; fi
+
 for h in $(har2hosts) ; do
-    kml="$h.kml"
-    curl -s "https://www.geotraceroute.com/petter.php?host=$h" > "$kml"
+    kml="cache/$h.kml"
+    if [ ! -f "$kml" ] ; then
+        curl -s "https://www.geotraceroute.com/petter.php?host=$h" > "$kml"
+    fi
     kmls="$kmls $kml"
 done
 
