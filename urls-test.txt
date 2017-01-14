@@ -5,3 +5,4 @@ http://www.aftenposten.no/
 http://www.vg.no/
 http://www.dagbladet.no/
 http://www.bt.no/
+http://www.barnehager.oslo.kommune.no/
