@@ -11,18 +11,23 @@ if [ "$1" ] ; then
 fi
 
 if [ ! -d har-data ]; then mkdir har-data ; fi
+if [ ! -d kml-data ]; then mkdir kml-data ; fi
 cat $file | while read url ; do
     case "$url" in
       http*)
         # Save with URL as filename, replacing / with % and dropping trailing slash.
         filename=$(echo "$url" | sed 's%/$%%' |tr / %)
         harfile="har-data/$filename.har"
+        kmlfile="kml-data/$filename.kml"
         if [ ! -e "$harfile" ] ; then
             echo "testing $url"
             if phantomjs --ssl-protocol any $basedir/netsniff.js "$url" > "$harfile.new" &&
-                [ -s "$harfile.new" ]; then
+              [ -s "$harfile.new" ] &&
+              [ "$(jq -r '.log | .entries | map(.request) | map(.url) | join("\n")'  $harfile.new)" ]; then
                 mv "$harfile.new" "$harfile"
+                $basedir/har2kml "$harfile" > $kmlfile
             else
+                echo "error: unable to handle $url"
                 if ! rm "$harfile.new" ; then
                     echo "error: unable to remove $harfile.new"
                 fi
