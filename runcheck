@@ -20,7 +20,7 @@ cat $file | while read url ; do
         harfile="har-data/$filename.har"
         kmlfile="kml-data/$filename.kml"
         if [ ! -e "$harfile" ] ; then
-            echo "testing $url"
+            echo "info: testing $url"
             if phantomjs --ssl-protocol any $basedir/netsniff.js "$url" > "$harfile.new" &&
               [ -s "$harfile.new" ] &&
               [ "$(jq -r '.log | .entries | map(.request) | map(.url) | join("\n")'  $harfile.new)" ]; then
