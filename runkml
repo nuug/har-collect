@@ -1,0 +1,17 @@
+#!/bin/sh
+
+basedir="$(cd $(dirname $0); pwd)"
+
+set -e
+
+if [ ! -d kml-data ]; then mkdir kml-data ; fi
+
+for harfile in "$@" ; do
+    filename=$(basename $harfile .har)
+    kmlfile="kml-data/$filename.kml"
+    if $basedir/har2kml "$harfile" > $kmlfile.new  ; then
+	mv $kmlfile.new $kmlfile
+    else
+        rm $kmlfile.new
+    fi
+done
