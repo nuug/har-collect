@@ -3,10 +3,19 @@
 # Use geotraceroute to fetch traceroutes to all hosts used to view a web page and print KML
 # output for all traces.
 
+usage() {
+    cat <<EOF
+Usage: $0 <har-file>
+EOF
+}
+
+gtrnode=4
+
 if [ "$1" ]; then
     har="$1"
 else
-    har=har-data/https\:%%www.politi.no.har
+    usage
+    exit 1
 fi
 
 har2hosts() {
@@ -19,7 +28,7 @@ if [ ! -d cache ] ; then mkdir cache ; fi
 for h in $(har2hosts) ; do
     kml="cache/$h.kml"
     if [ ! -f "$kml" ] ; then
-        curl -s "https://www.geotraceroute.com/petter.php?host=$h" > "$kml"
+        curl -s "https://www.geotraceroute.com/petter.php?node=$gtrnode&host=$h" > "$kml"
     fi
     kmls="$kmls $kml"
 done
