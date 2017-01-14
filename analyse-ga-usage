@@ -15,12 +15,30 @@ gaaipusers() {
     egrep -l '"url": .*google-analytics.com/.*aip=1' $dataset
 }
 
+piwikusers() {
+    egrep -l '"url": .*piwik' $dataset
+}
+
+fbusers() {
+    egrep -l '"url": .*facebook.com' $dataset
+}
+
+twusers() {
+    egrep -l '"url": .*twitter.com' $dataset
+}
+
 total=$(ls $dataset | wc -l)
 gaurl=$(gaurl | wc -l)
 gausers=$(gausers | wc -l)
 gaaipusers=$(gaaipusers | wc -l)
+piwikusers=$(piwikusers | wc -l)
+fbusers=$(fbusers | wc -l)
+twusers=$(twusers | wc -l)
 
 printf "%d (%.1f%%) of %d contacts google-analytics.com\n" "$gaurl" "$(echo 100 \* $gaurl / $total | bc -l)" "$total"
+printf "%d (%.1f%%) of %d mentions piwik\n" "$piwikusers" "$(echo 100 \* $piwikusers / $total | bc -l)" "$total"
+printf "%d (%.1f%%) of %d mentions twitter\n" "$twusers" "$(echo 100 \* $twusers / $total | bc -l)" "$total"
+printf "%d (%.1f%%) of %d mentions facebook\n" "$fbusers" "$(echo 100 \* $fbusers / $total | bc -l)" "$total"
 printf "%d (%.1f%%) of %d submits to google-analytics.com\n" "$gausers" "$(echo 100 \* $gausers / $total | bc -l)" "$total"
 printf "%d (%.1f%%) of %d uses aip=1 in the GA URL\n" "$gaaipusers" "$(echo 100 \* $gaaipusers / $gausers | bc -l)" "$gausers"
 
