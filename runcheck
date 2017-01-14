@@ -1,5 +1,7 @@
 #!/bin/sh
 
+basedir="$(cd $(dirname $0); pwd)"
+
 set -e
 
 file=urls-test.txt
@@ -8,6 +10,7 @@ if [ "$1" ] ; then
     file="$1"
 fi
 
+if [ ! -d har-data ]; then mkdir har-data ; fi
 cat $file | while read url ; do
     case "$url" in
       http*)
@@ -16,14 +19,16 @@ cat $file | while read url ; do
         harfile="har-data/$filename.har"
         if [ ! -e "$harfile" ] ; then
             echo "testing $url"
-            if phantomjs --ssl-protocol any netsniff.js "$url" > "$harfile.new" && 
+            if phantomjs --ssl-protocol any $basedir/netsniff.js "$url" > "$harfile.new" &&
                 [ -s "$harfile.new" ]; then
                 mv "$harfile.new" "$harfile"
             else
-                rm "$harfile.new"
+                if ! rm "$harfile.new" ; then
+                    echo "error: unable to remove $harfile.new"
+                fi
             fi
         else
-            echo found $harfile, not downloading
+            echo "info: not contacting "$url", already had $harfile"
         fi
         ;;
     esac
